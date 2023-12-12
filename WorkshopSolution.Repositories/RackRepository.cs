@@ -8,15 +8,25 @@ namespace WorkshopSolution.Repositories
   public class RackRepository
   {
     private List<Rack> _racks = new List<Rack>();
+    private readonly IUserContext _userContext;
+    private readonly WorkshopDbContext _workshopDbContext;
 
-    public RackRepository(IUserContext userContext)
-    {
-      _racks = new List<Rack>
+    public RackRepository(IUserContext userContext, WorkshopDbContext workshopDbContext)
+    {      
+      _userContext = userContext;
+      _workshopDbContext = workshopDbContext;
+      _racks = _workshopDbContext.Set<Rack>().ToList();
+      if (!_racks.Any())
       {
-        new Rack() { Id = 1, Name = "Demo Rack 1", Height = 1, Width = 12 },
-        new Rack() { Id = 2, Name = "Demo Rack 2", Height = 2, Width = 12 },
-        new Rack() { Id = 3, Name = "Demo Rack 3", Height = 3, Width = 12 },
-      };
+        var demoRacks = new List<Rack>()
+        {
+          new() { Id = 1, Name = "Demo Rack 1", Height = 1, Width = 12 },
+          new() { Id = 2, Name = "Demo Rack 2", Height = 2, Width = 12 },
+          new() { Id = 3, Name = "Demo Rack 3", Height = 3, Width = 12 },
+        };
+        _workshopDbContext.AddRange(demoRacks);
+        _workshopDbContext.SaveChanges();
+      }
     }
 
     public IEnumerable<Rack> GetAllRacks()

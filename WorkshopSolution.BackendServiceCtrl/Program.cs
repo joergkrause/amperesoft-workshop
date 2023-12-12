@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WorkshopSolution.BusinessLogic;
 using WorkshopSolution.BusinessLogic.Mappings;
 using WorkshopSolution.Persistence;
@@ -6,6 +7,11 @@ using WorkshopSolution.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("WorkshopDatabase");
+ArgumentNullException.ThrowIfNull(connectionString);
+
+builder.Services.AddDbContext<WorkshopDbContext>(opt => opt.UseMongoDB(connectionString, "WorkshopDatabase"));
+
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<RackRepository>();
 builder.Services.AddScoped<RackManager>();
