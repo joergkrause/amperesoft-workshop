@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("WorkshopDatabase");
 ArgumentNullException.ThrowIfNull(connectionString);
 
-builder.Services.AddDbContext<WorkshopDbContext>(opt => opt.UseMongoDB(connectionString, "WorkshopDatabase"));
+builder.Services.AddDbContext<WorkshopDbContext>(opt => opt.UseCosmos(connectionString, "WorkshopDatabase"));
 
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<RackRepository>();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Azure.Cosmos;
+using System;
 using WorkshopSolution.DomainModels;
 using WorkshopSolution.Persistence;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -15,7 +16,14 @@ namespace WorkshopSolution.Repositories
     {      
       _userContext = userContext;
       _workshopDbContext = workshopDbContext;
-      _racks = _workshopDbContext.Set<Rack>().ToList();
+      try
+      {
+        _racks = _workshopDbContext.Set<Rack>().ToList();
+      }
+      catch (CosmosException)
+      {
+        _workshopDbContext.Database.EnsureCreated();
+      }
       if (!_racks.Any())
       {
         var demoRacks = new List<Rack>()
