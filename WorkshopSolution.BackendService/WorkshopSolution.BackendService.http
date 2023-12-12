@@ -1,0 +1,6 @@
+@WorkshopSolution.BackendService_HostAddress = http://localhost:5268
+
+GET {{WorkshopSolution.BackendService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

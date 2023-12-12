@@ -1,0 +1,59 @@
+﻿@page "/"
+@inject RackServiceClient RackService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Daten</h1>
+
+<Alert Color="Color.Warning" Visible="!hasData">Keine Daten vorhanden</Alert>
+<Conditional Check="hasData">
+  <If>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Height</th>
+          <th scope="col">Width</th>
+          <th>Aktion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <Repeater Context="item" Items="data">
+          <tr>
+            <td class="table-primary">@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.Height</td>
+            <td>@item.Width</td>
+            <td>
+              <Button Type="ButtonType.Button" Color="Color.Danger" Size="Size.ExtraSmall" Clicked="@(() => DeleteRack(item.Id))" >Löschen</Button>
+            </td>
+          </tr>
+        </Repeater>
+      </tbody>
+    </table>
+  </If>
+</Conditional>
+
+@code {
+
+  private IList<RackViewModel> data;
+  private bool hasData => data != null;
+
+  protected override async Task OnInitializedAsync()
+  {
+    var dtos = await RackService.GetAllRacksAsync();
+    data = dtos.Select(dto => new RackViewModel
+    {
+      Id = dto.Id,
+      Name = dto.Name
+    }).ToList();
+  }
+
+  private async Task DeleteRack(int id)
+  {
+    // delete DB
+  }
+
+}
+

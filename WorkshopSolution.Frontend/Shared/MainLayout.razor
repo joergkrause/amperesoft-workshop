@@ -1,0 +1,24 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>WorkshopSolution.Frontend</PageTitle>
+
+@* <SideBar OnToggleDropDown="ToggleDrop" /> *@
+<div >
+    <div>
+        <RibbonBar LogoText="Demo Logo" DropDown="@ShowDrop" />
+    </div>
+    <main>
+            <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+  public bool ShowDrop { get; set; }
+
+  private void ToggleDrop()
+  {
+    ShowDrop = !ShowDrop;
+  }
+}
