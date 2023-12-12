@@ -15,6 +15,9 @@ namespace WorkshopSolution.Persistence
         : base(options)
     {
     }
+
+    public DbSet<Rack> Racks { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
