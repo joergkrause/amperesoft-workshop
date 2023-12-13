@@ -8,7 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WorkshopSolution.BackendServiceCtrl.Controllers
 {
-  [Authorize]
+  [Authorize(Policy = "RackUser")]
   [Route("api/[controller]")]
   [ApiController]
   [Produces("application/json")]
@@ -16,13 +16,12 @@ namespace WorkshopSolution.BackendServiceCtrl.Controllers
   public class RackController : ControllerBase
   {
 
-    private readonly RackManager _rackManager;
+    private readonly IRackManager _rackManager;
 
-    public RackController(RackManager rackManager)
+    public RackController(IRackManager rackManager)
     {
       _rackManager = rackManager;
     }
-
 
     [HttpGet(Name = "GetAllRacks")]
     [ProducesResponseType(typeof(IEnumerable<RackListDto>), StatusCodes.Status200OK)]
@@ -34,8 +33,7 @@ namespace WorkshopSolution.BackendServiceCtrl.Controllers
 
     [HttpGet("{id}", Name = "GetRack")]
     [ProducesResponseType(typeof(RackDetailDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]    
     public IActionResult Get(int id)
     {
       var data = _rackManager.GetRack(id);
@@ -63,11 +61,13 @@ namespace WorkshopSolution.BackendServiceCtrl.Controllers
       return Accepted();
     }
 
+    [Authorize(Policy = "DeleteRackUser")] // richtig. vorher prüfen!
     [HttpDelete("{id}", Name = "DeleteRack")]
     [ProducesResponseType(typeof(RackDetailDto), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     public IActionResult Delete(int id)
     {
+      // User.IsInRole("user"); // zu spät!
       return NoContent();
     }
 

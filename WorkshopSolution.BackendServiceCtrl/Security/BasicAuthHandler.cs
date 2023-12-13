@@ -5,19 +5,22 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using WorkshopSolution.Persistence;
+using WorkshopSolution.Repositories;
 
 internal class BasicAuthHandler : AuthenticationHandler<BasicAuthOptions>
 {
 
   private readonly IConfiguration _configuration;
   private readonly IUserContext _userContext;
+  private readonly RackRepository _rackRepository;
 
   public BasicAuthHandler(
     IOptionsMonitor<BasicAuthOptions> options, ILoggerFactory logger, UrlEncoder encoder, IConfiguration configuration, IUserContext userContext
-    ) : base(options, logger, encoder)
+    , RackRepository rackRepository) : base(options, logger, encoder)
   {
     _configuration = configuration;
     _userContext = userContext;
+    _rackRepository = rackRepository;
   }
 
   protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -54,12 +57,13 @@ internal class BasicAuthHandler : AuthenticationHandler<BasicAuthOptions>
     //}
     var userName = Request.Headers["X-UserName"];
 
+    var userClaims = _rackRepository.GetUserClaims(userName);
     var claims = new[]
     {
       new Claim(ClaimTypes.NameIdentifier, userName),
-      new Claim(ClaimTypes.Name, userName),
+      new Claim(ClaimTypes.Name, userName),      
     };
-    var identity = new ClaimsIdentity(claims, Scheme.Name);
+    var identity = new ClaimsIdentity(claims.Union(userClaims), Scheme.Name);
     var principal = new ClaimsPrincipal(identity);
     var ticket = new AuthenticationTicket(principal, Scheme.Name);
 

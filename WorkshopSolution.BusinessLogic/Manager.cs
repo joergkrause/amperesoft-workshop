@@ -9,14 +9,14 @@ namespace WorkshopSolution.BusinessLogic
   {
     public Manager(IServiceProvider serviceProvider)
     {
-      RackRepo = serviceProvider.GetRequiredService<RackRepository>();
+      RackRepo = serviceProvider.GetRequiredService<IRackRepository>();
       Mapper = serviceProvider.GetRequiredService<IMapper>();
       UserContext = serviceProvider.GetRequiredService<IUserContext>();
     }
 
     protected IMapper Mapper { get; }
 
-    protected RackRepository RackRepo { get; }
+    protected IRackRepository RackRepo { get; }
 
     protected IUserContext UserContext { get; }
   }

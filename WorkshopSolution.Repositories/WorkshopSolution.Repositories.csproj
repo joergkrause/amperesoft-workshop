@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.35.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WorkshopSolution.DomainModels\WorkshopSolution.DomainModels.csproj" />
     <ProjectReference Include="..\WorkshopSolution.Persistence\WorkshopSolution.Persistence.csproj" />
   </ItemGroup>

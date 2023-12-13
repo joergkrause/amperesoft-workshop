@@ -1,10 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace WorkshopSolution.DomainModels
 {
   public abstract class EntityBase
   {
+    [BsonId]
+    [BsonRepresentation(BsonType.Int32)]
     public int Id { get; set; }
 
     public bool IsValid()

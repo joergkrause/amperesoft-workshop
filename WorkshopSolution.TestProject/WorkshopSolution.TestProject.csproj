@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+        <PackageReference Include="Moq" Version="4.20.70" />
+        <PackageReference Include="MSTest.TestAdapter" Version="3.0.4" />
+        <PackageReference Include="MSTest.TestFramework" Version="3.0.4" />
+        <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\WorkshopSolution.BackendServiceCtrl\WorkshopSolution.BackendServiceCtrl.csproj" />
+        <ProjectReference Include="..\WorkshopSolution.BusinessLogic\WorkshopSolution.BusinessLogic.csproj" />
+        <ProjectReference Include="..\WorkshopSolution.Repositories\WorkshopSolution.Repositories.csproj" />
+        <ProjectReference Include="..\WorkshopSolution.Persistence\WorkshopSolution.Persistence.csproj" />
+    </ItemGroup>
+
+</Project>

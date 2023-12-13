@@ -1,10 +1,20 @@
 ﻿@page "/"
 @inject RackServiceClient RackService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Index</PageTitle>
 
 <h1>Daten</h1>
-
+<AuthorizeView>
+<Authorized>
+    <p>Angemeldet als @userName</p>
+    <a href="MicrosoftIdentity/Account/SignOut">Abmelden</a>
+  </Authorized>
+  <NotAuthorized>
+    <p>Benutzer ist nicht angemeldet</p>
+    <a href="MicrosoftIdentity/Account/SignIn">Anmelden</a>
+  </NotAuthorized>
+</AuthorizeView>
 <Alert Color="Color.Warning" Visible="!hasData">Keine Daten vorhanden</Alert>
 <Conditional Check="hasData">
   <If>
@@ -37,11 +47,15 @@
 
 @code {
 
+  private string userName;
   private IList<RackViewModel> data;
   private bool hasData => data != null;
 
   protected override async Task OnInitializedAsync()
   {
+    var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    userName = auth.User.Identity?.Name ?? "";
+
     var dtos = await RackService.GetAllRacksAsync();
     data = dtos.Select(dto => new RackViewModel
     {

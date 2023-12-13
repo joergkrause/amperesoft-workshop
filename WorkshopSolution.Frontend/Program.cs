@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using WorkshopSolution.Frontend;
 using WorkshopSolution.Frontend.Security;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,7 +35,27 @@ builder.Services.AddSingleton<RackServiceClient>(sp =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-// builder.Services.AddTransient()
+
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+  .AddMicrosoftIdentityWebApp(options =>
+  {
+    builder.Configuration.Bind("AzureAD", options);
+    options.Prompt = "login";
+
+    options.TokenValidationParameters.ValidateIssuer = false;
+    options.TokenValidationParameters.ValidateIssuerSigningKey = false;
+
+    options.Events.OnTokenValidated = async context =>
+    {
+      await Task.CompletedTask;
+    };
+
+    options.SaveTokens = true;
+  });
+
+builder.Services
+  .AddControllersWithViews()
+  .AddMicrosoftIdentityUI();
 
 builder.Services.AddBlazorise(options =>
 {
@@ -59,11 +82,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.MapBlazorHub();
+app.MapControllers();
 app.MapFallbackToPage("/_Host");
 
 app.Run();

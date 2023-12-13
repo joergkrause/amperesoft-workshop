@@ -3,7 +3,7 @@ using WorkshopSolution.DataTransferObjects;
 
 namespace WorkshopSolution.BusinessLogic
 {
-  public class RackManager(IServiceProvider serviceProvider) : Manager(serviceProvider)
+  public class RackManager(IServiceProvider serviceProvider) : Manager(serviceProvider), IRackManager
   {
     public RackDetailDto GetRack(int id)
     {
@@ -12,6 +12,8 @@ namespace WorkshopSolution.BusinessLogic
       {
         // hole mehr Daten
       }
+      // Test case!
+      // model.Name = $"R{model.Name}";
       return Mapper.Map<RackDetailDto>(model);
     }
 
@@ -20,5 +22,12 @@ namespace WorkshopSolution.BusinessLogic
       var models = RackRepo.GetAllRacks();
       return Mapper.Map<IEnumerable<RackListDto>>(models);
     }
+
+    public IEnumerable<RackListDto> GetRackByParams(int minheight, int maxheight, int minwidth, int maxwidth)
+    {
+      var models = RackRepo.QueryRackByName(r => r.Height >= minheight && r.Height <= maxheight && r.Width >= minwidth && r.Width <= maxwidth);
+      return Mapper.Map<IEnumerable<RackListDto>>(models);
+    }
+
   }
 }

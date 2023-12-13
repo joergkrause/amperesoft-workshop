@@ -1,19 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Windows.Markup;
 
 namespace WorkshopSolution.DomainModels
 {
+  
   public class Rack : EntityBase
   {
 
+    [BsonElement("name")]
     [StringLength(100), Required]
     [RackName("Demo")]
     public string Name { get; set; }
 
+    [BsonElement("h")]
     [Range(1, 1000)]
     public int Height { get; set; }
 
+    [BsonElement("w")]
     [Range(1, 1000)]
     public int Width { get; set; }
 
